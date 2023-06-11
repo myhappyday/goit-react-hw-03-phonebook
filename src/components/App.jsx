@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
-
-import contacts from './data/contacts.json';
+import initialContacts from './data/initialContacts.json';
 import { Container, Title, Subtitle } from './App.styled';
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
@@ -9,17 +8,38 @@ import Filter from './Filter';
 
 class App extends Component {
   state = {
-    contacts: contacts,
+    contacts: [],
     filter: '',
   };
 
+  componentDidMount() {
+    const savedContacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(savedContacts);
+
+    if (parsedContacts) {
+      // Запис даних з localStorage в state
+      this.setState({ contacts: parsedContacts });
+      return;
+    }
+    this.setState({ contacts: initialContacts });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      // Збереження даних зі state в localStorage
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   onDuplicateContact = name => {
-    return this.state.contacts.some(contact => contact.name === name);
+    return this.state.contacts.some(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
   };
 
   addContact = ({ name, number }) => {
     const contact = {
-      id: nanoid(),
+      id: nanoid(5),
       name,
       number,
     };

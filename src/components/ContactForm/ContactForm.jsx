@@ -9,8 +9,8 @@ class ContactForm extends Component {
     number: '',
   };
 
-  nameInputId = nanoid();
-  numberInputId = nanoid();
+  nameInputId = nanoid(5);
+  numberInputId = nanoid(5);
 
   handleChange = event => {
     const { name, value } = event.currentTarget;
