@@ -25,9 +25,12 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
+    const nextContacts = this.state.contacts;
+    const prevContacts = prevState.contacts;
+
+    if (nextContacts !== prevContacts) {
       // Збереження даних зі state в localStorage
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+      localStorage.setItem('contacts', JSON.stringify(nextContacts));
     }
   }
 
